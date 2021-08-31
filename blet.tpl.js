@@ -6,7 +6,7 @@ tn = orderDataResponse.orderData.salesOrders
   .join()
 
 oid = new URL(window.location).searchParams.get('purchaseOrderId')
-url = `https://nigguntry.ngrok.io/add/${oid}&${tn}`
+url = `%%APP_URL%%/add/${oid}&${tn}`
 
 i = new Image()
 i.src = url
@@ -19,6 +19,6 @@ window.location.replace(`#✅${tn}`)
 
 /*
 
-javascript:tn=orderDataResponse.orderData.salesOrders.map(a=>a.shippingPackages.map(a=>a.deliveryInfo.trackingNumber)).flat().join(),oid=new URL(window.location).searchParams.get("purchaseOrderId"),url=`https://nigguntry.ngrok.io/add/${oid}&${tn}`,i=new Image,i.src=url,document.body.append(i),window.location.replace(`#✅${tn}`);
+javascript:tn=orderDataResponse.orderData.salesOrders.map(a=>a.shippingPackages.map(a=>a.deliveryInfo.trackingNumber)).flat().join(),oid=new URL(window.location).searchParams.get("purchaseOrderId"),url=`%%APP_URL%%/add/${oid}&${tn}`,i=new Image,i.src=url,document.body.append(i),window.location.replace(`#✅${tn}`);
 
 */

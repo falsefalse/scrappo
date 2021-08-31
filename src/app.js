@@ -42,10 +42,15 @@ app.get('/last', (req, res) => {
   res.send(lastList || 'No list yet ツ')
 })
 
+const getHostname = req => req.headers['x-forwarded-host'] || req.headers.host
+
 app.get('/blet.js', (req, res) => {
   res.setHeader('content-type', 'text/plain')
 
-  res.send(fs.readFileSync('./blet.js'))
+  let template = fs.readFileSync('./blet.tpl.js').toString()
+  template = template.replace(/%%APP_URL%%/g, getHostname(req))
+
+  res.send(template)
 })
 
 module.exports = app
