@@ -5,16 +5,14 @@ const serveIndex = require('serve-index')
 
 const List = require('./list')
 
-const app = express()
-const port = 8090
-
+const STATIC_PATH = path.resolve(__dirname, './static')
+const BLET_PATH = path.resolve(__dirname, './blet.tpl.js')
 const DATA_PATH = path.resolve(__dirname, '../data')
-const list = new List(DATA_PATH)
 
-app.use(
-  '/',
-  express.static(path.resolve(__dirname, './static'), { extensions: 'html' })
-)
+const list = new List(DATA_PATH)
+const app = express()
+
+app.use('/', express.static(STATIC_PATH, { extensions: 'html' }))
 
 app.use(
   '/all',
@@ -43,8 +41,7 @@ app.get('/add/:tn_oid', (req, res) => {
 app.get('/last', (req, res) => {
   res.setHeader('content-type', 'text/plain')
 
-  const lastList = list.readLast()
-  res.send(lastList || 'No list yet ツ')
+  res.send(list.readLast() || 'No list yet ツ')
 })
 
 const hostname = req => req.headers['x-forwarded-host'] || req.headers.host
@@ -53,7 +50,7 @@ app.get('/blet.js', (req, res) => {
   res.setHeader('content-type', 'text/plain')
 
   const blet = fs
-    .readFileSync(path.resolve(__dirname, './blet.tpl.js'))
+    .readFileSync(BLET_PATH)
     .toString()
     .replace(/%%APP_URL%%/g, hostname(req))
 
