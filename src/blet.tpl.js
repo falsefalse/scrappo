@@ -10,7 +10,7 @@ order = orderDataResponse.orderData.salesOrders
 
 orderId = new URL(window.location).searchParams.get('purchaseOrderId')
 params = [orderId, ...order]
-url = `http://%%APP_URL%%/add/${params.join('&')}`
+url = `//%%APP_URL%%/add/${params.join('&')}`
 
 i = new Image()
 i.src = url
