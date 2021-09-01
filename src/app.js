@@ -2,6 +2,7 @@ const express = require('express')
 const fs = require('fs')
 const path = require('path')
 const serveIndex = require('serve-index')
+const bleter = require('bookmarkleter')
 
 const List = require('./list')
 
@@ -46,12 +47,22 @@ app.get('/last', (req, res) => {
 
 const hostname = req => req.headers['x-forwarded-host'] || req.headers.host
 
+const minify = string => {
+  const options = {
+    urlencode: false,
+    minify: true
+  }
+
+  return bleter(string, options)
+}
+
 app.get('/blet.js', (req, res) => {
   res.setHeader('content-type', 'text/plain')
 
-  const blet = fs
-    .readFileSync(BLET_PATH)
-    .toString()
+  let blet = fs.readFileSync(BLET_PATH).toString()
+
+  blet = blet
+    .replace(/%%MINIFIED%%/g, minify(blet))
     .replace(/%%APP_URL%%/g, hostname(req))
 
   res.send(blet)
