@@ -11,7 +11,10 @@ const port = 8090
 const DATA_PATH = path.resolve(__dirname, '../data')
 const list = new List(DATA_PATH)
 
-app.use('/', express.static(path.resolve(__dirname, './templates')))
+app.use(
+  '/',
+  express.static(path.resolve(__dirname, './static'), { extensions: 'html' })
+)
 
 app.use(
   '/all',
@@ -44,15 +47,17 @@ app.get('/last', (req, res) => {
   res.send(lastList || 'No list yet ツ')
 })
 
-const getHostname = req => req.headers['x-forwarded-host'] || req.headers.host
+const hostname = req => req.headers['x-forwarded-host'] || req.headers.host
 
 app.get('/blet.js', (req, res) => {
   res.setHeader('content-type', 'text/plain')
 
-  let template = fs.readFileSync('./blet.tpl.js').toString()
-  template = template.replace(/%%APP_URL%%/g, getHostname(req))
+  const blet = fs
+    .readFileSync(path.resolve(__dirname, './blet.tpl.js'))
+    .toString()
+    .replace(/%%APP_URL%%/g, hostname(req))
 
-  res.send(template)
+  res.send(blet)
 })
 
 module.exports = app
