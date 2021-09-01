@@ -25,16 +25,16 @@ app.use(
   })
 )
 
-app.get('/add/:tn_oid', (req, res) => {
-  const tn_oid = req.params.tn_oid
-  const [tracking, orderId] = tn_oid.split('&')
+app.get('/add/:param_string', (req, res) => {
+  const params = req.params.param_string.split('&')
+  const [orderId, tracking, carrier] = params
 
-  if (!orderId || !tracking) {
+  if (!orderId) {
     res.send('👅')
     return
   }
 
-  list.append([orderId, tracking])
+  list.append([orderId, tracking, carrier].compact().join(','))
 
   res.send('✅')
 })

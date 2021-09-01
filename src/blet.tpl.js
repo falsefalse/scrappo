@@ -1,17 +1,21 @@
-tn = orderDataResponse.orderData.salesOrders
+order = orderDataResponse.orderData.salesOrders
   .map(order =>
-    order.shippingPackages.map(pkg => pkg.deliveryInfo.trackingNumber)
+    order.shippingPackages.map(pkg => [
+      pkg.deliveryInfo.trackingNumber,
+      pkg.deliveryInfo.shippingCarrier
+    ])
   )
   .flat()
-  .join()
+  .flat()
 
-oid = new URL(window.location).searchParams.get('purchaseOrderId')
-url = `%%APP_URL%%/add/${oid}&${tn}`
+orderId = new URL(window.location).searchParams.get('purchaseOrderId')
+params = [orderId, ...order]
+url = `%%APP_URL%%/add/${params.join('&')}`
 
 i = new Image()
 i.src = url
 document.body.append(i)
-window.location.replace(`#✅${tn}`)
+window.location.replace(`#✅${order.join()}`)
 
 /*
 
