@@ -34,7 +34,7 @@ app.get('/add/:param_string', (req, res) => {
     return
   }
 
-  list.append([orderId, tracking, carrier].compact().join(','))
+  list.append([orderId, tracking, carrier].join(','))
 
   res.send('✅')
 })
