@@ -11,8 +11,10 @@ const port = 8090
 const DATA_PATH = path.resolve(__dirname, '../data')
 const list = new List(DATA_PATH)
 
+app.use('/', express.static(path.resolve(__dirname, './templates')))
+
 app.use(
-  '/',
+  '/all',
   express.static(DATA_PATH),
   serveIndex(DATA_PATH, {
     icons: true,
